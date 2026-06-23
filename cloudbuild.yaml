@@ -5,7 +5,7 @@ steps:
       [
         'build',
         '-t',
-        'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run/my-agent:$COMMIT_SHA',
+        'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run-source-deploy/my-agent:$COMMIT_SHA',
         '.'
       ]
 
@@ -14,7 +14,7 @@ steps:
     args:
       [
         'push',
-        'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run/my-agent:$COMMIT_SHA'
+        'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run-source-deploy/my-agent:$COMMIT_SHA'
       ]
 
   # Deploy to Cloud Run
@@ -26,7 +26,7 @@ steps:
         'deploy',
         'my-agent',
         '--image',
-        'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run/my-agent:$COMMIT_SHA',
+        'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run-source-deploy/my-agent:$COMMIT_SHA',
         '--region',
         'asia-south1',
         '--platform',
@@ -35,4 +35,8 @@ steps:
       ]
 
 images:
-  - 'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run/my-agent:$COMMIT_SHA'
+  - 'asia-south1-docker.pkg.dev/bigquery-499208/cloud-run-source-deploy/my-agent:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+serviceAccount: 'projects/bigquery-499208/serviceAccounts/bigquery-agent@bigquery-499208.iam.gserviceaccount.com'
