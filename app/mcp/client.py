@@ -86,10 +86,17 @@ class BigQueryMCPClient:
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
-        if self._session_cm is not None:
-            await self._session_cm.__aexit__(exc_type, exc, tb)
-        if self._streams_cm is not None:
-            await self._streams_cm.__aexit__(exc_type, exc, tb)
+        try:
+            if self._session_cm is not None:
+                await self._session_cm.__aexit__(exc_type, exc, tb)
+        except Exception as e:
+            logger.warning(f"Session close error: {e}")
+
+        try:
+            if self._streams_cm is not None:
+                await self._streams_cm.__aexit__(exc_type, exc, tb)
+        except Exception as e:
+            logger.warning(f"Stream close error: {e}")
 
     async def list_tools(self) -> list:
         """Returns the live list of MCP Tool objects the server advertises."""
